@@ -7,7 +7,7 @@ public:
 	Enemy();
 	~Enemy();
 	void update();
-	//void getHit(Projectile *p);
+	void getShot(Projectile *p);
 	void move();
 };
 

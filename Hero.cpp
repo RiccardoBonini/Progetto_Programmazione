@@ -8,6 +8,7 @@ Hero::Hero()
 	coordX = 0;
 	coordY = 0;
 	speed = 1;
+	alive = true;
 }
 
 Hero::~Hero()
@@ -18,7 +19,6 @@ void Hero::update(){
 	if (hp == 0)
 		alive = false;
 	handleInput();
-	
 	
 	//stampa di verifica delle coordinate
 	std::cout << coordX << "  " << coordY << std::endl;
@@ -33,9 +33,9 @@ void Hero::getItem(Item *item) {
 
 }
 
-/*void Hero::getHit(Enemy* enemy) {
+void Hero::getHit(Character* enemy) {
 	hp -= enemy->getDmg();
-}*/
+}
 
 void Hero::handleInput() {
 
@@ -58,19 +58,15 @@ void Hero::handleInput() {
 			break;
 		case SDLK_i:
 			//spara in alto
-			std::cout << "pew pew alto" << std::endl;
 			break;
 		case SDLK_k:
 			//spara in basso
-			std::cout << "pew pew basso" << std::endl;
 			break;
 		case SDLK_l:
 			//spara a destra
-			std::cout << "pew pew dx" << std::endl;
 			break;
 		case SDLK_j:
 			//spara a sinistra
-			std::cout << "pew pew sx" << std::endl;
 			break;
 
 		}

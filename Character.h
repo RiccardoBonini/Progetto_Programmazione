@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "Item.h"
+
 class Character
 {
 public:
@@ -11,6 +12,7 @@ public:
 	float getX() { return coordX; }
 	float getY() { return coordY; }
 	int getDmg() { return damage; }
+	bool isAlive() { return alive; }
 protected:
 	float coordX;
 	float coordY;

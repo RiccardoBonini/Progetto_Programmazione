@@ -1,9 +1,9 @@
 #pragma once
-#include "Hero.h"
+#include "Character.h"
 class Projectile
 {
 public:
-//	Projectile(Hero* hero, bool Dir, bool Inc);
+	Projectile(Character* hero, bool Dir, bool Inc);
 	~Projectile();
 	void update();
 	float getX() { return coordX; };

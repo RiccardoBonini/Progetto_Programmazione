@@ -15,8 +15,8 @@ void Enemy::move() {
 
 }
 
-/*void Enemy::getHit(Projectile *p) {
+void Enemy::getShot(Projectile *p) {
 
 	hp -= p->getDmg();
-}*/
+}
 void Enemy::update(){}

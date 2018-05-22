@@ -17,6 +17,7 @@ public:
 	void render();
 	void clean();
 	bool gameIsRunning() { return isRunning; }
+	bool heroIsAlive() { return hero->isAlive(); }
 private:
 	bool isRunning;
 	Item *item;
