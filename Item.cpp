@@ -16,3 +16,12 @@ Item::Item()
 Item::~Item()
 {
 }
+Item * Item::createItem(char choice){
+	if (choice == 'p')
+		return new Potion;
+	if (choice == 'a')
+		return new Ak47;
+	if (choice == 's')
+		return new spoon;
+}
+
