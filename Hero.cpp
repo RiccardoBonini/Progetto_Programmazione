@@ -22,10 +22,6 @@ Hero::~Hero()
 void Hero::update(){
 	if (hp == 0)
 		alive = false;
-	handleInput();
-	for (int i = 0; i < this->bullets.size(); i++)     //ciclo di aggiornamento dei proiettili
-		bullets[i].update();
-	
 	
 }
 
@@ -41,47 +37,25 @@ void Hero::getHit(Enemy enemy) {
 	hp -= enemy.getDmg();
 }
 
-void Hero::shoot( bool Dir, bool Inc) {
-	bullets.push_back(Bullet(this->getX(), this->getY(), Dir, Inc));
-
-}
-
-void Hero::handleInput() {
-
-	SDL_Event event;
-	SDL_PollEvent(&event);
-	switch (event.type) {
-	case SDL_KEYDOWN:
-		switch (event.key.keysym.sym) {
-		case SDLK_w:
-			if(coordY!=0)
-				coordY -= speed;
-			break;
-		case SDLK_s:
-			if(coordY!=Ybound)
-				coordY += speed;
-			break;
-		case SDLK_d:
-			if(coordX!=Xbound)
+void Hero::move(bool dir, bool inc) {
+	if (dir == true) {
+		if (inc == true) {
+			if (coordX != Xbound)
 				coordX += speed;
-			break;
-		case SDLK_a:
-			if(coordX!=0)
+		}
+		else {
+			if (coordX != 0)
 				coordX -= speed;
-			break;
-		case SDLK_i:
-			shoot( false, true);
-			break;
-		case SDLK_k:
-			shoot( false, false);
-			break;
-		case SDLK_l:
-			shoot(true, true);
-			break;
-		case SDLK_j:
-			shoot( true, false);
-			break;
-
+		}
+	}
+	else {
+		if (inc == true) {
+			if (coordY != 0)
+				coordY -= speed;
+		}
+		else {
+			if (coordY != Ybound)
+				coordY += speed;
 		}
 	}
 }

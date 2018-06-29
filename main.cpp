@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 	
 	while (game->gameIsRunning()){
 		
-		
+		game->handleInput();
 		game->update();
 		game->render();
 		//Sleep(30);

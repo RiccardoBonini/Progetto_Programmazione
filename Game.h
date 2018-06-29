@@ -14,6 +14,7 @@ public:
 	~Game();
 	void init(const char* title, int x, int y, int width, int height, bool fullscreen);
 	void handleExit();
+	void handleInput();
 	void update();
 	void render();
 	void clean();
@@ -29,6 +30,7 @@ private:
 	int roomWidth;
 	int roomHeight;
 	std::vector<Enemy> enemies;
+	std::vector<Bullet> bullets;
 	SDL_Window *window;
 	SDL_Renderer *renderer;
 };
