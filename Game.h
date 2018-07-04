@@ -10,7 +10,7 @@
 class Game
 {
 public:
-	Game(int num);
+	Game(int num1, int num2, int num3);
 	~Game();
 	void init(const char* title, int x, int y, int width, int height, bool fullscreen);
 	void handleExit();
@@ -26,10 +26,12 @@ private:
 	Hero hero;
 	Map room;
 	//Enemy enemy;
-	int enemynum;
+	int goblinNum;
+	int zombieNum;
+	int werewolfNum;
 	int roomWidth;
 	int roomHeight;
-	std::vector<Enemy> enemies;
+	std::vector<Enemy*> enemies;
 	std::vector<Bullet> bullets;
 	SDL_Window *window;
 	SDL_Renderer *renderer;

@@ -7,7 +7,6 @@ class Character
 public:
 	Character();
 	~Character();
-	void draw();
 	virtual void update() = 0;
 	float getX() { return coordX; }
 	float getY() { return coordY; }

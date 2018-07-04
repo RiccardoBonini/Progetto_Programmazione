@@ -33,9 +33,9 @@ void Hero::getItem(Item item) {
 
 }
 
-void Hero::getHit(Enemy enemy) {
+/*void Hero::getHit(Enemy enemy) {
 	hp -= enemy.getDmg();
-}
+}*/
 
 void Hero::move(bool dir, bool inc) {
 	if (dir == true) {

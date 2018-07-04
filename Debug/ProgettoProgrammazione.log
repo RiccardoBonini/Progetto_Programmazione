@@ -1,8 +1,9 @@
-﻿  Game.cpp
-c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(30): warning C4244: '=': conversione da 'float' a 'int'. Possibile perdita di dati.
-c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(31): warning C4244: '=': conversione da 'float' a 'int'. Possibile perdita di dati.
-c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(83): warning C4018: '<': errata corrispondenza tra signed e unsigned
-c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(85): warning C4018: '<': errata corrispondenza tra signed e unsigned
-c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(105): warning C4018: '<': errata corrispondenza tra signed e unsigned
-c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(112): warning C4018: '<': errata corrispondenza tra signed e unsigned
+﻿  Enemy.cpp
+c:\projects\progettoprogrammazione\progettoprogrammazione\enemy.cpp(82): warning C4244: '=': conversione da 'int' a 'float'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\enemy.cpp(83): warning C4244: '=': conversione da 'int' a 'float'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\enemy.cpp(139): warning C4244: '=': conversione da 'int' a 'float'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\enemy.cpp(140): warning C4244: '=': conversione da 'int' a 'float'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\enemy.cpp(166): warning C4244: '=': conversione da 'int' a 'float'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\enemy.cpp(167): warning C4244: '=': conversione da 'int' a 'float'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\enemy.cpp(75): warning C4715: 'Enemy::makeEnemy': non tutti i percorsi di controllo restituiscono un valore
   ProgettoProgrammazione.vcxproj -> C:\Projects\ProgettoProgrammazione\Debug\ProgettoProgrammazione.exe

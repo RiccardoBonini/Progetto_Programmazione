@@ -11,8 +11,3 @@ Character::~Character()
 {
 }
 
-void Character::draw() {
-	
-	
-	
-}

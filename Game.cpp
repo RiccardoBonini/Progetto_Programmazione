@@ -2,9 +2,11 @@
 #include "Hero.h"
 
 
-Game::Game(int num)
+Game::Game(int num1, int num2, int num3)
 {
-	enemynum = num;
+	goblinNum = num1;
+	zombieNum = num2;
+	werewolfNum = num3;
 }
 
 
@@ -24,8 +26,12 @@ void Game::init(const char *title, int x, int y, int width, int height, bool ful
 	isRunning = true;
 	item ;
 	room ;
-	for (int i = 0; i < enemynum; i++)
-		enemies.push_back(Enemy(room.getWidth(), room.getHeight()));
+	for (int i = 0; i < goblinNum; i++)
+		enemies.push_back(Enemy::makeEnemy('g',room.getWidth(), room.getHeight()));
+	for (int i = 0; i < zombieNum; i++)
+		enemies.push_back(Enemy::makeEnemy('z', room.getWidth(), room.getHeight()));
+	for (int i = 0; i < werewolfNum; i++)
+		enemies.push_back(Enemy::makeEnemy('w', room.getWidth(), room.getHeight()));
 	hero= Hero(room.getWidth(), room.getHeight());
 	roomWidth = room.getWidth();
 	roomHeight = room.getHeight();
@@ -83,11 +89,11 @@ void Game::update() {
 	for (int j = 0; j < bullets.size(); j++) {
 		bullets[j].update();
 		for (int h = 0; h < enemies.size(); h++)
-			if (bullets[j].getX() == enemies[h].getX() && bullets[j].getY() == enemies[h].getY())
+			if (bullets[j].getX() == enemies[h]->getX() && bullets[j].getY() == enemies[h]->getY())
 				enemies.erase(enemies.begin() + h);
 	}
-	/*for (int i = 0; i< enemies.size(); i++)
-		enemies[i].roam();*/
+	for (int i = 0; i< enemies.size(); i++)
+		enemies[i]->move();
 	
 }
 
@@ -107,11 +113,11 @@ void Game::render() {
 					std::cout << "*";
 			}
 			for (int e = 0; e < enemies.size(); e++) {
-				if (i == enemies[e].getY() && j == enemies[e].getX())
-					std::cout << "M";
+				if (i == enemies[e]->getY() && j == enemies[e]->getX())
+					enemies[e]->draw();
 			}
 			if (j == hero.getX() && i == hero.getY())
-				std::cout << "O"/*hero->draw()*/;
+				hero.draw();
 			else	
 				std::cout << " ";
 

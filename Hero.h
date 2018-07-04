@@ -12,9 +12,9 @@ public:
 	~Hero();
 	void move(bool dir, bool inc);
 	void getItem(Item item);
-	void getHit(Enemy enemy);
+	//void getHit(Enemy enemy);
 	void update();
-	void render() { std::cout << "O"; }
+	void draw() { std::cout << "O"; }
 private:
 	float Xbound;
 	float Ybound;
