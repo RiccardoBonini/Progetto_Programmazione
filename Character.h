@@ -10,6 +10,7 @@ public:
 	virtual void update() = 0;
 	float getX() { return coordX; }
 	float getY() { return coordY; }
+	int getHp() { return hp; }
 	int getDmg() { return damage; }
 	bool isAlive() { return alive; }
 protected:

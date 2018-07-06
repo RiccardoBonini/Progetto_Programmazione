@@ -54,6 +54,9 @@ void Game::handleInput() {
 	switch (event.type) {
 	case SDL_KEYDOWN:
 		switch (event.key.keysym.sym) {
+		case SDLK_ESCAPE:
+			isRunning = false;
+			break;
 		case SDLK_w:
 			hero.move(false, true);
 			break;
