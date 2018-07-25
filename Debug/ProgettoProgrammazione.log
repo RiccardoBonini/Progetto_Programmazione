@@ -1,12 +1,40 @@
-﻿  Game.cpp
-c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(36): warning C4244: '=': conversione da 'float' a 'int'. Possibile perdita di dati.
-c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(37): warning C4244: '=': conversione da 'float' a 'int'. Possibile perdita di dati.
-c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(92): warning C4018: '<': errata corrispondenza tra signed e unsigned
-c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(94): warning C4018: '<': errata corrispondenza tra signed e unsigned
-c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(98): warning C4018: '<': errata corrispondenza tra signed e unsigned
-c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(114): warning C4018: '<': errata corrispondenza tra signed e unsigned
-c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(118): warning C4018: '<': errata corrispondenza tra signed e unsigned
+﻿  Bullet.cpp
+c:\projects\progettoprogrammazione\progettoprogrammazione\character.h(23): warning C4244: 'return': conversione da 'float' a 'int'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\bullet.cpp(15): warning C4244: '=': conversione da 'float' a 'int'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\bullet.cpp(16): warning C4244: '=': conversione da 'float' a 'int'. Possibile perdita di dati.
+  Enemy.cpp
+c:\projects\progettoprogrammazione\progettoprogrammazione\character.h(23): warning C4244: 'return': conversione da 'float' a 'int'. Possibile perdita di dati.
+  EnemyFactory.cpp
+c:\projects\progettoprogrammazione\progettoprogrammazione\character.h(23): warning C4244: 'return': conversione da 'float' a 'int'. Possibile perdita di dati.
+  Game.cpp
+c:\projects\progettoprogrammazione\progettoprogrammazione\character.h(23): warning C4244: 'return': conversione da 'float' a 'int'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(39): warning C4244: 'argomento': conversione da 'int' a 'float'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(76): warning C4244: 'argomento': conversione da 'int' a 'float'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(79): warning C4244: 'argomento': conversione da 'int' a 'float'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(82): warning C4244: 'argomento': conversione da 'int' a 'float'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(85): warning C4244: 'argomento': conversione da 'int' a 'float'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(95): warning C4018: '<': errata corrispondenza tra signed e unsigned
+c:\projects\progettoprogrammazione\progettoprogrammazione\game.cpp(116): warning C4018: '<': errata corrispondenza tra signed e unsigned
   Hero.cpp
+c:\projects\progettoprogrammazione\progettoprogrammazione\character.h(23): warning C4244: 'return': conversione da 'float' a 'int'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\hero.cpp(19): warning C4244: '=': conversione da 'float' a 'int'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\hero.cpp(20): warning C4244: '=': conversione da 'float' a 'int'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\hero.cpp(56): warning C4244: '+=': conversione da 'float' a 'int'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\hero.cpp(57): warning C4244: '+=': conversione da 'float' a 'int'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\hero.cpp(62): warning C4244: '-=': conversione da 'float' a 'int'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\hero.cpp(63): warning C4244: '-=': conversione da 'float' a 'int'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\hero.cpp(70): warning C4244: '-=': conversione da 'float' a 'int'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\hero.cpp(71): warning C4244: '-=': conversione da 'float' a 'int'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\hero.cpp(76): warning C4244: '+=': conversione da 'float' a 'int'. Possibile perdita di dati.
+c:\projects\progettoprogrammazione\progettoprogrammazione\hero.cpp(77): warning C4244: '+=': conversione da 'float' a 'int'. Possibile perdita di dati.
+  Map.cpp
+c:\projects\progettoprogrammazione\progettoprogrammazione\character.h(23): warning C4244: 'return': conversione da 'float' a 'int'. Possibile perdita di dati.
+  MovementBehavior.cpp
+c:\projects\progettoprogrammazione\progettoprogrammazione\character.h(23): warning C4244: 'return': conversione da 'float' a 'int'. Possibile perdita di dati.
+  TextureManager.cpp
+c:\projects\progettoprogrammazione\progettoprogrammazione\character.h(23): warning C4244: 'return': conversione da 'float' a 'int'. Possibile perdita di dati.
   main.cpp
+c:\projects\progettoprogrammazione\progettoprogrammazione\character.h(23): warning C4244: 'return': conversione da 'float' a 'int'. Possibile perdita di dati.
   Generazione del codice in corso...
+c:\projects\progettoprogrammazione\progettoprogrammazione\enemyfactory.cpp(12): warning C4715: 'EnemyFactory::makeEnemy': non tutti i percorsi di controllo restituiscono un valore
   ProgettoProgrammazione.vcxproj -> C:\Projects\ProgettoProgrammazione\Debug\ProgettoProgrammazione.exe

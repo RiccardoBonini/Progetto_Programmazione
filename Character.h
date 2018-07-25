@@ -8,16 +8,25 @@ public:
 	Character();
 	~Character();
 	virtual void update() = 0;
-	float getX() { return coordX; }
-	float getY() { return coordY; }
+	int getX() { return coordX; }
+	int getY() { return coordY; }
 	int getHp() { return hp; }
 	int getDmg() { return damage; }
+	void incX(int i) { coordX += i; }
+	void incY(int i) { coordY += i; }
+	void decX(int i) { coordX -= i; }
+	void setX(int x) { coordX = x; }
+	void decY(int i) { coordY -= i; }
+	void setY(int y) { coordY = y; }
+	int getXbound() { return Xbound; }
+	int getYbound() { return Ybound; }
+	int getSpd() { return speed; }
 	bool isAlive() { return alive; }
 protected:
-	float Xbound;
-	float Ybound;
-	float coordX;
-	float coordY;
+	int Xbound;
+	int Ybound;
+	int coordX;
+	int coordY;
 	float speed;
 	int hp;
 	int damage;

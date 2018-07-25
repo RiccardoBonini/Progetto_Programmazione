@@ -1,6 +1,10 @@
 #pragma once
 #include "Character.h"
 #include "Bullet.h"
+#include "MovementBehavior.h"
+
+class MovementBehavior;
+
 class Enemy:public Character
 {
 public:
@@ -11,30 +15,34 @@ public:
 	void die() { coordX = -1; coordX = -1; Xbound = 0; Ybound = 0; }
 	void roam();
 	virtual void draw() = 0;
-	virtual void move()=0;
-	static Enemy* makeEnemy(char choice, float bound1, float bound2);
+	virtual void move() = 0;
 protected:
-	float Xbound;
-	float Ybound;
+	MovementBehavior* behavior;
+	/*float Xbound;
+	float Ybound;*/
 };
 
 class Goblin : public Enemy {
 public:
-	Goblin(float bound1, float bound2);
+	Goblin(int bound1, int bound2);
 	void move();
 	void draw();
+
+	
 };
 
 class Zombie : public Enemy {
 public:
-	Zombie(float bound1, float bound2);
+	Zombie(int bound1, int bound2);
     void move();
 	void draw();
+
 };
 
 class Werewolf : public Enemy {
 public:
-	Werewolf(float bound1, float bound2);
+	Werewolf(int bound1, int bound2);
 	void move();
 	void draw();
+
 };

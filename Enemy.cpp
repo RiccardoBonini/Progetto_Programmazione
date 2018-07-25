@@ -55,7 +55,6 @@ void Enemy::roam() {
 		}
 	}
 }
-void Enemy::move(){}
 
 void Enemy::draw(){}
 
@@ -65,100 +64,60 @@ void Enemy::getShot(Bullet p) {
 }
 void Enemy::update(){}
 
-Enemy* Enemy::makeEnemy(char choice, float bound1, float bound2) {
-	if (choice == 'g')
-		return new Goblin(bound1, bound2);
-	if (choice == 'z')
-		return  new Zombie(bound1, bound2);
-	if (choice == 'w')
-		return  new Werewolf( bound1,  bound2);
-}
 
-Goblin::Goblin(float bound1, float bound2) {
+Goblin::Goblin(int bound1, int bound2) {
 	hp = 70;
 	speed = 1;
 	damage = 25;
 	alive = true;
 	coordX = rand() % 50;
 	coordY = rand() % 10;
-	Xbound = bound1 - 4;
-	Ybound = bound2 - 4;
+	Xbound = bound1 -2;
+	Ybound = bound2 -2;
+	
+	this->behavior = new GoblinBehavior();
 }
 
 void Goblin::move()
 {
-	int i = rand() % 100;
-	int j = rand() % 100;
-	if (i % 2 == 0) {
-		if (coordX != Xbound)
-			coordX += speed;
-		if (coordX == Xbound)
-			coordX-=speed;
-		if (j % 2 == 0) {
-			if (coordY != 0)
-				coordY -= speed;
-			if (coordY == 0)
-				coordY+= speed;
-		}
-		else {
-			if (coordY != Ybound)
-				coordY+= speed;
-			if (coordY == Ybound)
-				coordY-= speed;
-		}
-	}
-	if (i % 2 != 0) {
-		if (coordX != 0)
-			coordX-= speed;
-		if (coordX == 0)
-			coordX+= speed;
-		if (j % 2 == 0) {
-			if (coordY != 0)
-				coordY-= speed;
-			if (coordY == 0)
-				coordY+= speed;
-		}
-		else {
-			if (coordY != Ybound)
-				coordY+= speed;
-			if (coordY == Ybound)
-				coordY-= speed;
-		}
-	}
+	this->behavior->move(this);
 }
 
 void Goblin::draw() {
 	std::cout << "G";
 }
 
-Zombie::Zombie(float bound1, float bound2) {
+Zombie::Zombie(int bound1, int bound2) {
 	hp = 150;
 	speed = 1;
 	damage = 50;
 	alive = true;
 	coordX = rand() % 50;
 	coordY = rand() % 10;
-	Xbound = bound1 - 4;
-	Ybound = bound2 - 4;
+	Xbound = bound1 -2;
+	Ybound = bound2 -2;
+	
+	this->behavior = new ZombieBehavior;
 }
 
 void Zombie::move()
 {
-	if (coordX != Xbound)
+	this->behavior->move(this);
+	/*if (coordX != Xbound)
 		coordX += speed;
 	else if(coordX == Xbound)
 		coordX -= speed;
 	else if (coordX == 0)
 		coordX+= speed;
 	else if(coordX != 0)
-		coordY -= speed;
+		coordY -= speed;*/
 }
 
 void Zombie::draw() {
 	std::cout << "Z";
 }
 
-Werewolf::Werewolf(float bound1, float bound2) {
+Werewolf::Werewolf(int bound1, int bound2) {
 	hp = 200;
 	speed = 1;
 	damage = 50;
@@ -166,19 +125,22 @@ Werewolf::Werewolf(float bound1, float bound2) {
 	coordX = rand() % 50;
 	coordY = rand() % 10;
 	Xbound = bound1 - 4;
-	Ybound = bound2 - 4;
+	Ybound = bound2 -4;
+	
+	this->behavior = new WerewolfBehavior;
 }
 
 void Werewolf::move()
 {
-	if (coordY != Ybound)
+	this->behavior->move(this);
+	/*if (coordY != Ybound)
 		coordY += speed;
 	else if (coordY == Ybound)
 		coordY -= speed;
 	else if (coordY == 0)
 		coordY += speed;
 	else if (coordY != 0)
-		coordY -= 0;
+		coordY -= 0;*/
 }
 
 void Werewolf::draw() {

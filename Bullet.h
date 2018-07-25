@@ -1,4 +1,8 @@
 #pragma once
+#include"SDL.h"
+#include"SDL_image.h"
+
+
 class Bullet
 {
 public:
@@ -8,12 +12,14 @@ public:
 	float getX() { return coordX; };
 	float getY() { return coordY; };
 	int getDmg() { return damage; };
+	void render();
 private:
 	float coordX;
 	float coordY;
 	int damage;
 	bool dir;
 	bool inc;
-	
+	SDL_Rect rect;
+	SDL_Texture* bulletTex;
 };
 

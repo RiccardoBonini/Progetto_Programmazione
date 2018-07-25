@@ -1,12 +1,14 @@
 #include "Game.h"
-#include "Hero.h"
 
+
+SDL_Renderer* Game::renderer = nullptr;
 
 Game::Game(int num1, int num2, int num3)
 {
 	goblinNum = num1;
 	zombieNum = num2;
 	werewolfNum = num3;
+
 }
 
 
@@ -25,16 +27,17 @@ void Game::init(const char *title, int x, int y, int width, int height, bool ful
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);}
 	isRunning = true;
 	item ;
-	room ;
-	for (int i = 0; i < goblinNum; i++)
-		enemies.push_back(Enemy::makeEnemy('g',room.getWidth(), room.getHeight()));
-	for (int i = 0; i < zombieNum; i++)
-		enemies.push_back(Enemy::makeEnemy('z', room.getWidth(), room.getHeight()));
-	for (int i = 0; i < werewolfNum; i++)
-		enemies.push_back(Enemy::makeEnemy('w', room.getWidth(), room.getHeight()));
-	hero= Hero(room.getWidth(), room.getHeight());
+	room =  Map() ;
 	roomWidth = room.getWidth();
 	roomHeight = room.getHeight();
+	for (int i = 0; i < goblinNum; i++)
+		enemies.push_back(EnemyFactory::makeEnemy('g',roomWidth, roomHeight));
+	for (int i = 0; i < zombieNum; i++)
+		enemies.push_back(EnemyFactory::makeEnemy('z', roomWidth, roomHeight));
+	for (int i = 0; i < werewolfNum; i++)
+		enemies.push_back(EnemyFactory::makeEnemy('w', roomWidth, roomHeight));
+	hero= Hero(room.getWidth(), room.getHeight());
+	
 }
 
 void Game::handleExit(){
@@ -70,16 +73,16 @@ void Game::handleInput() {
 			hero.move(true, false);
 			break;
 		case SDLK_i:
-			bullets.push_back(Bullet(hero.getX(), hero.getY(), false, true));
+			bullets.push_back(Bullet(hero.getRx(), hero.getRy(), false, true));
 			break;
 		case SDLK_k:
-			bullets.push_back(Bullet(hero.getX(), hero.getY(), false, false));
+			bullets.push_back(Bullet(hero.getRx(), hero.getRy(), false, false));
 			break;
 		case SDLK_l:
-			bullets.push_back(Bullet(hero.getX(), hero.getY(), true, true));
+			bullets.push_back(Bullet(hero.getRx(), hero.getRy(), true, true));
 			break;
 		case SDLK_j:
-			bullets.push_back(Bullet(hero.getX(), hero.getY(), true, false));
+			bullets.push_back(Bullet(hero.getRx(), hero.getRy(), true, false));
 			break;
 
 		}
@@ -89,21 +92,31 @@ void Game::handleInput() {
 void Game::update() {
 	
 	hero.update();
-	for (int j = 0; j < bullets.size(); j++) {
-		bullets[j].update();
+	for (int j = 0; j < bullets.size(); j++) 
+		bullets[j].update();/*
 		for (int h = 0; h < enemies.size(); h++)
 			if (bullets[j].getX() == enemies[h]->getX() && bullets[j].getY() == enemies[h]->getY())
 				enemies.erase(enemies.begin() + h);
 	}
-	for (int i = 0; i< enemies.size(); i++)
+	for (int i = 0; i < enemies.size(); i++) {
 		enemies[i]->move();
+		std::cout << "CordX di " << " " << i << ":" << " " << enemies[i]->getX();
+		std::cout << " CordY di " << " " << i << ":" << " " << enemies[i]->getY();
+		
+	}
+	std::cout << room.getHeight();
+	std::cout << room.getWidth();*/
 	
 }
 
 void Game::render() {
-	//SDL_RenderClear(renderer);
-	//SDL_RenderPresent(renderer);
-	system("cls");
+	SDL_RenderClear(renderer);
+	room.drawMap();
+	hero.render();
+	for (int j = 0; j < bullets.size(); j++)
+		bullets[j].render();
+	SDL_RenderPresent(renderer);
+	/*system("cls");
 	for (int i = 0; i < roomWidth; i++) {
 		room.render();
 	}
@@ -131,7 +144,7 @@ void Game::render() {
 		std::cout << "#";
 	}
 	std::cout << std::endl;
-	std::cout << hero.getX() << " " << hero.getY();
+	std::cout << hero.getX() << " " << hero.getY();*/
 }
 
 void Game::clean() {

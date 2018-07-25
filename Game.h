@@ -7,6 +7,11 @@
 #include "Enemy.h"
 #include "Bullet.h"
 #include "Map.h"
+#include "EnemyFactory.h"
+#include "SDL_image.h"
+
+
+
 class Game
 {
 public:
@@ -20,6 +25,7 @@ public:
 	void clean();
 	bool gameIsRunning() { return isRunning; }
 	bool heroIsAlive() { return hero.isAlive(); }
+	static SDL_Renderer *renderer;
 private:
 	bool isRunning;
 	Item item;
@@ -34,6 +40,6 @@ private:
 	std::vector<Enemy*> enemies;
 	std::vector<Bullet> bullets;
 	SDL_Window *window;
-	SDL_Renderer *renderer;
+	
 };
 
