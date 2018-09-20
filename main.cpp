@@ -1,7 +1,7 @@
 #include "SDL.h"
 #include "Game.h"
 #include <iostream>
-#include "windows.h"
+
 
 Game *game = nullptr;
 
@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 	std::cin >> num3;*/
 
 	game = new Game(num1, num2, num3);
-	game->init("Progetto", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1300, 800, true);
+	game->init("Progetto", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1200, 800, true);
 	
 	while (game->gameIsRunning()){
 		

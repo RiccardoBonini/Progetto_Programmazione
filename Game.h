@@ -8,7 +8,9 @@
 #include "Bullet.h"
 #include "Map.h"
 #include "EnemyFactory.h"
-#include "SDL_image.h"
+/*#include "Tile.h"
+#include"TileFactory.h"*/
+#include"SDL_image.h"
 
 
 
@@ -25,13 +27,15 @@ public:
 	void clean();
 	bool gameIsRunning() { return isRunning; }
 	bool heroIsAlive() { return hero.isAlive(); }
+	bool CollisionC(Character a, Character* b);
 	static SDL_Renderer *renderer;
+	static SDL_Texture* LoadTexture(const char* sprite);
+	static void draw(SDL_Texture* tex, SDL_Rect src, SDL_Rect dest);
 private:
 	bool isRunning;
 	Item item;
 	Hero hero;
 	Map room;
-	//Enemy enemy;
 	int goblinNum;
 	int zombieNum;
 	int werewolfNum;

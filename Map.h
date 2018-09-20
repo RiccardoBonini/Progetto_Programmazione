@@ -1,6 +1,11 @@
 #pragma once
-#include "Enemy.h"
-#include "Item.h"
+//#include "Enemy.h"
+//#include "Item.h"
+#include"Tile.h"
+#include<vector>
+#include "SDL.h"
+#include "SDL_image.h"
+#include"EnemyFactory.h"
 
 class Map
 {
@@ -11,15 +16,14 @@ public:
 	void spawnEnemy();
 	int getWidth() { return width; }
 	int getHeight() { return height; }
-	void render() { std::cout << "#"; }
+	//void render() { std::cout << "#"; }
 	void drawMap();
+	void loadMap();
+	void update();
 private:
 	int height;
 	int width;
-	int RoomSeed;
-	SDL_Rect src, dest;
-	SDL_Texture* wall;
-	SDL_Texture* terrain;
-	int map[20][20];
+	std::vector<Tile*> tiles;
+	int ntile;
 };
 

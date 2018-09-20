@@ -7,23 +7,27 @@ class MovementBehavior
 {
 public:
 	MovementBehavior();
-	virtual void move(Enemy* e) = 0;
+	virtual int moveX(int coordX, int speed) = 0;
+	virtual int moveY(int coordY, int speed) = 0;
 };
 
 class ZombieBehavior: public MovementBehavior {
 public:
-	virtual void move(Enemy* e);
+	virtual int moveX(int coordX, int speed);
+	virtual int moveY(int coordY, int speed);
 };
 
 class GoblinBehavior: public MovementBehavior {
 public:
 	
-	void move(Enemy*  e);
+	virtual int moveX(int coordX, int speed);
+	virtual int moveY(int coordY, int speed);
 };
 
 class WerewolfBehavior: public MovementBehavior {
 public:
-	void move(Enemy* e);
+	virtual int moveX(int coordX, int speed) ;
+	virtual int moveY(int coordY, int speed) ;
 };
 
 

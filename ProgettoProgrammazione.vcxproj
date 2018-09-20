@@ -160,7 +160,8 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MovementBehavior.cpp" />
-    <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="TileFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character.h" />
@@ -172,7 +173,8 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MovementBehavior.h" />
-    <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="Tile.h" />
+    <ClInclude Include="TileFactory.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

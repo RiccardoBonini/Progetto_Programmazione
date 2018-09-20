@@ -27,15 +27,40 @@ void Game::init(const char *title, int x, int y, int width, int height, bool ful
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);}
 	isRunning = true;
 	item ;
-	room =  Map() ;
+	//room.loadMap();
+	/*for (int i = 0; i < 20; i++) {
+		for (int j = 0; j < 50; j++)
+			map[i][j] = room.loadMap(i, j);
+	}
+	//inserimento tiles nel vettore. In questo modo il rendering richiede solo di disegnare i singoli tiles
+	//int muro = 0;
+	for (int i = 0; i < 20; i++) {
+		for (int j = 0; j < 50; j++) {
+			int muro = map[i][j];
+			int x = j * 32;
+			int y = i * 32;
+			if (muro == 1)
+				tiles.push_back(TileFactory::makeTile('w', x, y));
+			//SDL_RenderCopy(Game::renderer, wall, NULL, &dest);
+			//TextureManager::draw(wall, src, dest);
+			else if (muro == 0)
+				tiles.push_back(TileFactory::makeTile('g', x, y));
+			//SDL_RenderCopy(Game::renderer, terrain, NULL, &dest);
+			//TextureManager::draw(terrain, src, dest);
+			else
+				break;
+		}
+	}*/
 	roomWidth = room.getWidth();
 	roomHeight = room.getHeight();
-	for (int i = 0; i < goblinNum; i++)
+	for (int i = 0; i < 5 /*goblinNum*/; i++)
 		enemies.push_back(EnemyFactory::makeEnemy('g',roomWidth, roomHeight));
-	for (int i = 0; i < zombieNum; i++)
+	for (int i = 0; i < 2/*zombieNum*/; i++)
 		enemies.push_back(EnemyFactory::makeEnemy('z', roomWidth, roomHeight));
-	for (int i = 0; i < werewolfNum; i++)
+	for (int i = 0; i < 2 /*werewolfNum*/; i++)
 		enemies.push_back(EnemyFactory::makeEnemy('w', roomWidth, roomHeight));
+	room = Map();
+	room.loadMap();
 	hero= Hero(room.getWidth(), room.getHeight());
 	
 }
@@ -90,10 +115,17 @@ void Game::handleInput() {
 }
 
 void Game::update() {
+	//room.update();
 	
-	hero.update();
 	for (int j = 0; j < bullets.size(); j++) 
-		bullets[j].update();/*
+		bullets[j].update();
+	for (int j = 0; j < enemies.size(); j++) {
+		if (CollisionC(hero, enemies[j]))
+			hero.getHit(enemies[j]);
+		enemies[j]->update();
+	}
+	hero.update();
+	/*
 		for (int h = 0; h < enemies.size(); h++)
 			if (bullets[j].getX() == enemies[h]->getX() && bullets[j].getY() == enemies[h]->getY())
 				enemies.erase(enemies.begin() + h);
@@ -113,6 +145,8 @@ void Game::render() {
 	SDL_RenderClear(renderer);
 	room.drawMap();
 	hero.render();
+	for (int j = 0; j < enemies.size(); j++)
+		enemies[j]->render();
 	for (int j = 0; j < bullets.size(); j++)
 		bullets[j].render();
 	SDL_RenderPresent(renderer);
@@ -151,4 +185,25 @@ void Game::clean() {
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
+}
+
+SDL_Texture* Game::LoadTexture(const char* sprite) {
+
+	SDL_Surface* tmpSurface = IMG_Load(sprite);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(Game::renderer, tmpSurface);
+	SDL_FreeSurface(tmpSurface);
+
+	return texture;
+}
+
+void Game::draw(SDL_Texture* tex, SDL_Rect src, SDL_Rect dest) {
+	SDL_RenderCopy(Game::renderer, tex, &src, &dest);
+}
+
+bool Game::CollisionC(Character a, Character* b) {
+	if (a.getRx() + a.getRw()/2 < b->getRx() || a.getRx() > b->getRx() + b->getRw()/2 ||
+		a.getRy() + a.getRh()/2 < b->getRy() || a.getRy() > b->getRy() + b->getRh()/2)
+		return false;
+	else
+		return true;
 }

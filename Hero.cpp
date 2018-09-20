@@ -5,7 +5,6 @@
 
 Hero::Hero() {
 
-	
 }
 
 Hero::Hero(float bound1, float bound2)
@@ -13,16 +12,18 @@ Hero::Hero(float bound1, float bound2)
 	hp = 250;
 	coordX = 0;
 	coordY = 0;
-	speed = 15;
+	speed = 35;
 	damage = 30;
 	alive = true;
 	Xbound = bound1 ;
 	Ybound = bound2 ;
-	heroTex = TextureManager::LoadTexture("sprite/knight.png");
-	
+	tex = Game::LoadTexture("sprite/knight.png");
+	rect.h = 64;
+	rect.w = 64;
 	rect.x =120;
 	rect.y =60;
-	
+	timer = 0;
+	damaged = false;
 }
 
 Hero::~Hero()
@@ -30,10 +31,20 @@ Hero::~Hero()
 }
 
 void Hero::update(){
-	if (hp == 0)
+	if (damaged== true) {
+		if (timer < 50 )
+			timer++;
+		else {
+			timer = 0;
+			damaged = false;
+			SDL_SetTextureColorMod(tex, 255, 255, 255);
+		}
+	}
+	
+	if (hp <= 0)
 		alive = false;
-	rect.h = 64;
-	rect.w = 64;
+	/*rect.h = 64;
+	rect.w = 64;*/
 	
 }
 
@@ -45,9 +56,11 @@ void Hero::getItem(Item item) {
 
 }
 
-/*void Hero::getHit(Enemy enemy) {
-	hp -= enemy.getDmg();
-}*/
+void Hero::getHit(Enemy* enemy) {
+	damaged = true;
+	SDL_SetTextureColorMod(tex, 255, 0, 0);
+	//hp -= enemy->getDmg();
+}
 
 void Hero::move(bool dir, bool inc) {
 	if (dir == true) {
@@ -82,7 +95,6 @@ void Hero::move(bool dir, bool inc) {
 
 void Hero::render() {
 
-	
-	SDL_RenderCopy(Game::renderer, heroTex, NULL, &rect);
+	SDL_RenderCopy(Game::renderer, tex, NULL, &rect);
 
 }
