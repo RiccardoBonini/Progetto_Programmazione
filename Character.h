@@ -17,9 +17,9 @@ public:
 	void incX(int i) { coordX += i; }
 	void incY(int i) { coordY += i; }
 	void decX(int i) { coordX -= i; }
-	void setX(int x) { coordX = x; }
+	void setRx(int x) { rect.x = x; }
 	void decY(int i) { coordY -= i; }
-	void setY(int y) { coordY = y; }
+	void setRy(int y) { rect.y = y; }
 	int getXbound() { return Xbound; }
 	int getYbound() { return Ybound; }
 	int getSpd() { return speed; }
@@ -39,5 +39,7 @@ protected:
 	bool alive;
 	SDL_Texture* tex;
 	SDL_Rect rect;
+	bool damaged;
+	int timer;
 };
 

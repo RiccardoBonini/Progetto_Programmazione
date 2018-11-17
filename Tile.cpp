@@ -21,6 +21,7 @@ Wall::Wall(int x, int y)
 	rect.x = x;
 	rect.y = y;
 	rect.h = rect.w = 32;
+	collision = true;
 }
 
 /*void Wall::render() {
@@ -33,7 +34,7 @@ Ground::Ground(int x, int y)
 	rect.x = x;
 	rect.y = y;
 	rect.h = rect.w = 32;
-
+	collision = false;
 }
 
 /*void Ground::render() {

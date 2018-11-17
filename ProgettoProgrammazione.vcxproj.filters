@@ -51,6 +51,12 @@
     <ClCompile Include="Tile.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="ItemFactory.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="Observer.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -84,6 +90,12 @@
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="Tile.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemFactory.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>

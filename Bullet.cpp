@@ -5,6 +5,7 @@
 
 Bullet::Bullet(float X, float Y, bool Dir, bool Inc)
 {
+	erasable = false;
 	coordX = X;
 	coordY = Y;
 	dir = Dir;
@@ -61,5 +62,10 @@ void Bullet::render() {
 	
 }
 
+void Bullet::erase() {
 
+	rect.x =rect.y = NULL;
+	
+	rect.h = rect.w = 0;
+}
 

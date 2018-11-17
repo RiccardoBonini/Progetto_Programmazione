@@ -1,16 +1,21 @@
 #pragma once
+#include"SDL.h"
+#include"SDL_image.h"
 class Item
 {
 public:
 	Item();
 	~Item();
-	float getX() { return coordX; }
-	float getY() { return coordY; }
+	int getRx() { return rect.x; }
+	int getRy() { return rect.y; }
+	int getRh() { return rect.h; }
+	int getRw() { return rect.w; }
 	int getHp() { return hpValue; }
 	int getDmg() { return damageValue; }
 	float getSpd() { return speedValue; }
-	static Item*createItem(char choice);
-
+	void render();
+	void erase() { erasable = true; }
+	bool isErasable() { return erasable; }
 protected:
 	float coordX;
 	float coordY;
@@ -18,21 +23,23 @@ protected:
 	int hpValue;
 	int damageValue;
 	float speedValue;
-		
+	bool erasable;
+	SDL_Texture* tex;
+	SDL_Rect rect;	
 };
 
 class Potion :public Item {
 public:
-	Potion();
+	Potion(int x, int y);
 };
 
-class Ak47 :public Item {
+class Bazooka :public Item {
 public:
-	Ak47();
+	Bazooka(int x, int y);
 };
 
-class MightySpoon : public Item {
+class MightyFork : public Item {
 public:
-	MightySpoon();
+	MightyFork(int x, int y);
 };
 

@@ -1,6 +1,7 @@
 //#include "Game.h"
 #include"Map.h"
 #include"TileFactory.h"
+#include "Bullet.h"
 
 int lvl[20][50] = {
 		{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, },
@@ -71,8 +72,8 @@ void Map::loadMap() {
 			if (muro == 1) {
 				//tiles[id] = TileFactory::makeTile('w', x, y);
 				tiles.push_back(TileFactory::makeTile('w', x, y));
-				id++;
-				ntile++;
+				
+				
 			}
 			//tiles.push_back(TileFactory::makeTile('w', x, y));
 		//tiles.push_back(EnemyFactory::makeEnemy('g', x, y));
@@ -81,8 +82,7 @@ void Map::loadMap() {
 			else if (muro == 0) {
 				//tiles[id] = TileFactory::makeTile('g', x, y);
 				tiles.push_back(TileFactory::makeTile('g', x, y));
-				id++;
-				ntile++;
+				
 			}
 			//tiles.push_back(TileFactory::makeTile('g', x, y));
 		//tiles.push_back(EnemyFactory::makeEnemy('w', x, y));
@@ -91,6 +91,7 @@ void Map::loadMap() {
 			
 		}
 	}
+
 
 }
 
@@ -129,4 +130,147 @@ void Map::update() {
 		tiles[i]->update();
 
 	}
+}
+
+void Map::CollisionBW(std::vector<Bullet> &bullets)
+{
+	/*for (int i = 0; i < tiles.size(); i++) {
+		
+		if (a.getRx() + a.getRw() < tiles[i]->getRx() || a.getRx() > tiles[i]->getRx() + tiles[i]->getRw() ||
+			a.getRy() + a.getRh() < tiles[i]->getRy() || a.getRy() > tiles[i]->getRy() + tiles[i]->getRh())
+			return false;
+		else if (tiles[i]->solid() == true)
+			return true;
+		/*if (a.getRx() + a.getRw() > tiles[i]->getRx() && a.getRx() < tiles[i]->getRx() + tiles[i]->getRw() &&
+			a.getRy() + a.getRh() > tiles[i]->getRy() && a.getRy() < tiles[i]->getRy() + tiles[i]->getRh() && tiles[i]->solid() == true)
+			return true;
+		else
+			return false;
+
+	
+	
+	}*/
+	for (int i = 0; i < tiles.size(); i++) {
+		if (tiles[i]->solid()) {
+			for (int j = 0; j < bullets.size(); j++) {
+				{
+					if (bullets[j].getRx() + bullets[j].getRw() < tiles[i]->getRx() || bullets[j].getRx() > tiles[i]->getRx() + tiles[i]->getRw() ||
+						bullets[j].getRy() + bullets[j].getRh() < tiles[i]->getRy() || bullets[j].getRy() > tiles[i]->getRy() + tiles[i]->getRh())
+						;
+					else
+						bullets[j].eraseBullet();
+
+				}
+			}
+		}
+	}
+	
+}
+
+bool Map::CollisionCW(int x, int y, int w, int h)
+{
+	bool pos = false;
+	for (int i = 0; i < tiles.size(); i++) {
+		if (tiles[i]->solid()) {
+			if (x + w  < tiles[i]->getRx() || x > tiles[i]->getRx() + tiles[i]->getRw()
+				|| y + h < tiles[i]->getRy() + tiles[i]->getRh() || y > tiles[i]->getRy() + tiles[i]->getRh())
+				pos = false;
+			else {
+				return true;
+			}
+		}
+	}
+	return pos;
+}
+
+bool Map::CollisionCWup(int x, int y, int w, int h, int speed)
+{
+	int newY = y - speed;
+	bool pos = false;
+	for (int i = 0; i < tiles.size(); i++) {
+		if (tiles[i]->solid()) {
+			if (x + w  < tiles[i]->getRx() || x > tiles[i]->getRx() + tiles[i]->getRw()
+				|| newY + h < tiles[i]->getRy() ||newY > tiles[i]->getRy() + tiles[i]->getRh())
+				pos = false;
+			else {
+				target = tiles[i];
+				return true;
+			}
+		}
+	}
+	return pos;
+}
+
+bool Map::CollisionCWdown(int x, int y, int w, int h, int speed)
+{
+	int newY = y + speed;
+	bool pos = false;
+	for (int i = 0; i < tiles.size(); i++) {
+		if (tiles[i]->solid()) {
+			if (x + w  < tiles[i]->getRx() || x > tiles[i]->getRx() + tiles[i]->getRw()
+				|| newY+ h < tiles[i]->getRy() || newY > tiles[i]->getRy() + tiles[i]->getRh())
+				pos = false;
+			else {
+				target = tiles[i];
+				return true;
+			}
+		}
+	}
+	return pos;
+}
+
+bool Map::CollisionCWleft(int x, int y, int w, int h, int speed)
+{
+	int newX = x - speed ;
+	bool pos = false;
+	for (int i = 0; i < tiles.size(); i++) {
+		if (tiles[i]->solid()) {
+			if (newX + w  < tiles[i]->getRx() || newX > tiles[i]->getRx() + tiles[i]->getRw()
+				|| y + h < tiles[i]->getRy() || y > tiles[i]->getRy() + tiles[i]->getRh())
+				pos = false;
+			else {
+				target = tiles[i];
+				return true;
+			}
+		}
+	}
+	return pos;
+}
+
+bool Map::CollisionCWright(int x, int y, int w, int h, int speed)
+{
+	int newX = x + speed ;
+	bool pos = false;
+	for (int i = 0; i < tiles.size(); i++) {
+		if (tiles[i]->solid()) {
+			if (newX + w  < tiles[i]->getRx() || newX > tiles[i]->getRx() + tiles[i]->getRw()
+				|| y + h < tiles[i]->getRy() || y > tiles[i]->getRy() + tiles[i]->getRh())
+				pos = false;
+			else {
+				target = tiles[i];
+				return true;
+			}
+		}
+	}
+	return pos;
+}
+
+void Map::setUp(Character & hero)
+{
+	hero.setRy(target->getRy() + target->getRh() +1);
+}
+
+void Map::setDown(Character & hero)
+{
+	hero.setRy(target->getRy() -hero.getRh() -1);
+}
+
+void Map::setLeft(Character & hero)
+{
+	hero.setRx(target->getRx() + target->getRw() + 1);
+}
+
+void Map::setRight(Character & hero)
+{
+	hero.setRx(target->getRx() - hero.getRw() - 1);
 }

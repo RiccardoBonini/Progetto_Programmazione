@@ -12,7 +12,8 @@ Hero::Hero(float bound1, float bound2)
 	hp = 250;
 	coordX = 0;
 	coordY = 0;
-	speed = 35;
+	speed = 15;
+	spdw =spds=spdd=spda = tmpspdw = tmpspds = tmpspdd = tmpspda = 10;
 	damage = 30;
 	alive = true;
 	Xbound = bound1 ;
@@ -24,6 +25,8 @@ Hero::Hero(float bound1, float bound2)
 	rect.y =60;
 	timer = 0;
 	damaged = false;
+	up = down = left = right = true;
+	
 }
 
 Hero::~Hero()
@@ -37,7 +40,7 @@ void Hero::update(){
 		else {
 			timer = 0;
 			damaged = false;
-			SDL_SetTextureColorMod(tex, 255, 255, 255);
+			color(255, 255, 255);
 		}
 	}
 	
@@ -48,45 +51,45 @@ void Hero::update(){
 	
 }
 
-void Hero::getItem(Item item) {
+void Hero::getItem(Item* item) {
 	
-    speed += item.getSpd();
-	hp += item.getHp();
-	damage += item.getDmg();
+    speed += item->getSpd();
+	hp += item->getHp();
+	damage += item->getDmg();
 
 }
 
 void Hero::getHit(Enemy* enemy) {
 	damaged = true;
-	SDL_SetTextureColorMod(tex, 255, 0, 0);
+	color(255, 0, 0);
 	//hp -= enemy->getDmg();
 }
 
 void Hero::move(bool dir, bool inc) {
 	if (dir == true) {
 		if (inc == true) {
-			/*if (coordX != Xbound)*/ {
-			coordX += speed / 10;
+			{
+			//coordX += speed / 10;
 			rect.x += speed;
 		}
 		}
 		else {
-			/*if (coordX != 0)*/ {
-				coordX -= speed / 10;
+			{
+				//coordX -= speed / 10;
 				rect.x -= speed;
 			}
 		}
 	}
 	else {
 		if (inc == true) {
-			/*if (coordY != 0) */{
-				coordY -= speed / 10;
+			 {
+				//coordY -= speed / 10;
 				rect.y -= speed;
 			}
 		}
 		else {
-			/*if (coordY != Ybound)*/ {
-				coordY += speed / 10;
+			{
+				//coordY += speed / 10;
 				rect.y += speed;
 			}
 		}
@@ -97,4 +100,9 @@ void Hero::render() {
 
 	SDL_RenderCopy(Game::renderer, tex, NULL, &rect);
 
+}
+
+void Hero::color(int n1, int n2, int n3) {
+
+	SDL_SetTextureColorMod(tex, n1, n2, n3);
 }

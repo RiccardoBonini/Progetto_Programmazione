@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "Game.h"
+#include "ItemFactory.h"
 
 Enemy::Enemy(){}
 
@@ -62,17 +63,29 @@ void Enemy::render(){
 }
 
 void Enemy::getShot(Bullet p) {
-
-	hp -= p.getDmg();
+	damaged = true;
+	SDL_SetTextureColorMod(tex, 255, 0, 0);
+	//hp -= p.getDmg();
+	alive = false;
 }
 void Enemy::update(){
 	/*rect.h = 64;
 	rect.w = 64;*/
-	//move();
+	if (damaged == true) {
+		if (timer < 50)
+			timer++;
+		else {
+			timer = 0;
+			damaged = false;
+			SDL_SetTextureColorMod(tex, 255, 255, 255);
+		}
+	}
+	move();
 }
 
 
 Goblin::Goblin(int bound1, int bound2) {
+	erasable = false;
 	hp = 70;
 	speed = 3.5;
 	damage = 25;
@@ -87,6 +100,8 @@ Goblin::Goblin(int bound1, int bound2) {
 	rect.y =2+ rand()% 500;
 	rect.h = 64;
 	rect.w = 64;
+	timer = 0;
+	damaged = false;
 }
 
 void Goblin::move()
@@ -95,11 +110,16 @@ void Goblin::move()
 	rect.y = this->behavior->moveY(rect.y, speed);
 }
 
+Item* Goblin::drop() {
+	return ItemFactory::createItem('f', rect.x, rect.y);
+}
+
 /*void Goblin::draw() {
 	std::cout << "G";
 }*/
 
 Zombie::Zombie(int bound1, int bound2) {
+	erasable = false;
 	hp = 150;
 	speed = 10;
 	damage = 50;
@@ -114,6 +134,8 @@ Zombie::Zombie(int bound1, int bound2) {
 	rect.y = 2 + rand() % 500;
 	rect.h = 64;
 	rect.w = 64;
+	timer = 0;
+	damaged = false;
 }
 
 void Zombie::move()
@@ -129,11 +151,16 @@ void Zombie::move()
 		coordY -= speed;*/
 }
 
+Item* Zombie::drop() {
+	return ItemFactory::createItem('p', rect.x, rect.y);
+}
+
 /*void Zombie::draw() {
 	std::cout << "Z";
 }*/
 
 Werewolf::Werewolf(int bound1, int bound2) {
+	erasable = false;
 	hp = 200;
 	speed = 2.5;
 	damage = 50;
@@ -148,6 +175,8 @@ Werewolf::Werewolf(int bound1, int bound2) {
 	rect.y = 2 + rand() % 500;
 	rect.h = 64;
 	rect.w = 64;
+	timer = 0;
+	damaged = false;
 }
 
 void Werewolf::move()
@@ -161,6 +190,10 @@ void Werewolf::move()
 		coordY += speed;
 	else if (coordY != 0)
 		coordY -= 0;*/
+}
+
+Item* Werewolf::drop() {
+	return ItemFactory::createItem('b', rect.x, rect.y);
 }
 
 /*void Werewolf::draw() {
