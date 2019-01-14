@@ -1,5 +1,6 @@
 #pragma once
 #include"SDL.h"
+#undef main
 #include"SDL_image.h"
 class Item
 {
@@ -16,6 +17,8 @@ public:
 	void render();
 	void erase() { erasable = true; }
 	bool isErasable() { return erasable; }
+	void setRx(int x) { rect.x = x; }
+	void setRy(int y) { rect.y = y; }
 protected:
 	float coordX;
 	float coordY;

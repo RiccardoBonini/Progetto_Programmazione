@@ -1,6 +1,6 @@
 #include "Bullet.h"
 #include "Game.h"
-//#include"TextureManager.h"
+
 
 
 Bullet::Bullet(float X, float Y, bool Dir, bool Inc)
@@ -17,14 +17,7 @@ Bullet::Bullet(float X, float Y, bool Dir, bool Inc)
 	rect.x = X + 16;
 	rect.y = Y + 16;
 	rect.h = rect.w = 24;
-	/*if (Dir == true && Inc == true)
-		bulletTex = Game::LoadTexture("sprite/bullet2.png");
-	else if (Dir == true && Inc == false)
-		bulletTex = Game::LoadTexture("sprite/bullet4.png");
-	else if (Dir == false && Inc == true)
-		bulletTex = Game::LoadTexture("sprite/bullet1.png");
-	else if (Dir == false && Inc == false)
-		bulletTex = Game::LoadTexture("sprite/bullet3.png");*/
+	speed = 3;
 	bulletTex = Game::LoadTexture("sprite/projectile.png");
 }
 
@@ -37,21 +30,21 @@ void Bullet::update() {
 	if (dir) {
 		if (inc) {
 			coordX++;
-			rect.x+=1;
+			rect.x+=speed;
 		}
 		else {
 			coordX--;
-			rect.x -= 1;
+			rect.x -= speed;
 		}
 	}
 	else {
 		if (inc) {
 			coordY--;
-			rect.y -= 1;
+			rect.y -= speed;
 		}
 		else {
 			coordY++;
-			rect.y += 1;
+			rect.y += speed;
 		}
 	}
 		

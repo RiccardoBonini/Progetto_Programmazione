@@ -2,6 +2,8 @@
 #include <iostream>
 #include "Item.h"
 #include"SDL.h"
+#undef main
+
 #include"SDL_image.h"
 
 class Character
@@ -9,7 +11,7 @@ class Character
 public:
 	Character();
 	~Character();
-	//virtual void update() = 0;
+	
 	int getX() { return coordX; }
 	int getY() { return coordY; }
 	int getHp() { return hp; }
@@ -39,6 +41,7 @@ protected:
 	bool alive;
 	SDL_Texture* tex;
 	SDL_Rect rect;
+	SDL_Rect srect;
 	bool damaged;
 	int timer;
 };

@@ -2,121 +2,85 @@
 
  MovementBehavior::MovementBehavior() {}
 
-/*void ZombieBehavior::move(Enemy* e) {
-	if (e->getX() != e->getXbound())
-		e->setX(e->getX() + e->getSpd());
-	else if (e->getX() == e->getXbound())
-		e->setX(e->getX() - e->getSpd());
-	else if (e->getX()==0)
-		e->setX(e->getX() + e->getSpd());
-	
-}
 
-void GoblinBehavior::move(Enemy* e) {
-	int i = rand() % 100;
-	int j = rand() % 100;
-	if (i % 2 == 0) {
-		if ((e->getX() != e->getXbound()))
-			e->setX((e->getX() + e->getSpd()));
-		if ((e->getX() == e->getXbound()))
-			e->setX((e->getX() - e->getSpd()));
-		if (j % 2 == 0) {
-			if (e->getY() > 0)
-				e->setY((e->getY() - e->getSpd()));
-			if (e->getY() == 0)
-				e->setY((e->getY() + e->getSpd()));
-		}
-		else {
-			if (e->getY() < e->getYbound())
-				e->setY((e->getY() + e->getSpd()));
-			if (e->getY() == e->getYbound())
-				e->setY((e->getY() - e->getSpd()));
-		}
-	}
-	if (i % 2 != 0) {
-		if (e->getX() != 0)
-			e->setX((e->getX() - e->getSpd()));
-		if ((e->getX() == 0))
-			e->setX((e->getX() + e->getSpd()));
-		if (j % 2 == 0) {
-			if (e->getY() > 0)
-				e->setY((e->getY() - e->getSpd()));
-			if (e->getY() == 0)
-				e->setY((e->getY() + e->getSpd()));
-		}
-		else {
-			if (e->getY() < e->getYbound())
-				e->setY((e->getY() + e->getSpd()));
-			if (e->getY() == e->getYbound())
-				e->setY((e->getY() - e->getSpd()));
-		}
-	}
-}
 
-void WerewolfBehavior::move(Enemy* e) {
-	if ((e->getY() < e->getYbound()) && (e->getY() > 0) ) 
-		e->incY(e->getSpd());			
-	else if (e->getY() == e->getYbound())
-		e->decY(e->getSpd());
-	else if ( e->getY() == 0)
-		e->incY( e->getSpd());
-	
-}*/
+ void ZombieBehavior::move(Enemy & enemy, Hero hero)
+ {
+	 if (enemy.HeroIsSpotted() == true) {
 
- int ZombieBehavior::moveX(int coordX, int speed) {
-
-	 if (coordX <= 500) {
-		 int x = coordX + speed; 
-		 return x;
+		 if (enemy.getRy()<hero.getRy() && enemy.getDown() == true)
+			 enemy.setRy(enemy.getRy() + enemy.getSpd());
+		 else if (enemy.getRy()>hero.getRy() && enemy.getUp() == true)
+			 enemy.setRy(enemy.getRy() - enemy.getSpd());
+		 if (enemy.getRx()<hero.getRx() && enemy.getRight() == true)
+			 enemy.setRx(enemy.getRx() + enemy.getSpd());
+		 else if (enemy.getRx()>hero.getRx() && enemy.getLeft() == true)
+			 enemy.setRx(enemy.getRx() - enemy.getSpd());
 	 }
-	 else if(coordX >0){
-		 int x = coordX - speed;
-		 return x;
+	 else if (enemy.getRight() == true || enemy.getLeft() == true) {
+		 if (enemy.getRight() == true && enemy.getLeft() == false)
+			 enemy.setDirezione(1);
+		 else if (enemy.getRight() == false && enemy.getLeft() == true)
+			 enemy.setDirezione(-1);
+		 int spd = enemy.getDirezione() * enemy.getSpd();
+		 
+		 enemy.setRx(enemy.getRx() + spd);
+
 	 }
-	
+	 
+
  }
 
- int ZombieBehavior::moveY(int coordY, int speed) {
-	 return 0;
- }
+ void GoblinBehavior::move(Enemy & enemy, Hero hero)
+ {
+	 if (enemy.HeroIsSpotted() == true) {
 
- int GoblinBehavior::moveX(int coordX, int speed) {
- 
-	 int r = rand() % 2;
-	 if (r == 0) {
-		 int x = coordX + speed;
-		 return x;
+		 if (enemy.getRy()<hero.getRy() && enemy.getUp() == true)
+			 enemy.setRy(enemy.getRy() - enemy.getSpd());
+		 else if (enemy.getRy()>hero.getRy() && enemy.getDown() == true)
+			 enemy.setRy(enemy.getRy() + enemy.getSpd());
+		 if (enemy.getRx()<hero.getRx() && enemy.getLeft() == true)
+			 enemy.setRx(enemy.getRx() - enemy.getSpd());
+		 else if (enemy.getRx()>hero.getRx() && enemy.getRight() == true)
+			 enemy.setRx(enemy.getRx() + enemy.getSpd());
 	 }
 	 else {
-		 int x = coordX - speed;
-		 return x;
+		 int i = rand() % 2;
+		 int j = rand() % 2;
+		 if(i==1 && enemy.getRight()==true)
+			 enemy.setRx(enemy.getRx() + enemy.getSpd());
+		 else if(i==2 && enemy.getLeft()==true)
+			 enemy.setRx(enemy.getRx() - enemy.getSpd());
+		 if(j==1 && enemy.getUp()==true)
+			 enemy.setRy(enemy.getRy() - enemy.getSpd());
+		 else if(j==2 && enemy.getDown()==true)
+			 enemy.setRy(enemy.getRy() + enemy.getSpd());
 	 }
- 
+	 
  }
 
- int GoblinBehavior::moveY(int coordY, int speed){
-	 int r = rand() % 2;
-	 if (r == 0) {
-		 int x = coordY + speed;
-		 return x;
+ void WerewolfBehavior::move(Enemy & enemy, Hero hero)
+ {
+	 if (enemy.HeroIsSpotted()==true) {
+		 
+		 if(enemy.getRy()<hero.getRy() && enemy.getDown()==true)
+			 enemy.setRy(enemy.getRy() + enemy.getSpd());
+		 else if(enemy.getRy()>hero.getRy() && enemy.getUp()==true)
+			 enemy.setRy(enemy.getRy() - enemy.getSpd());
+		 if(enemy.getRx()<hero.getRx() && enemy.getRight()==true)
+			 enemy.setRx(enemy.getRx() + enemy.getSpd());
+		 else if(enemy.getRx()>hero.getRx() && enemy.getLeft()==true)
+			 enemy.setRx(enemy.getRx() - enemy.getSpd());
 	 }
-	 else {
-		 int x = coordY - speed;
-		 return x;
-	 }
- }
+	 else if (enemy.getDown() == true || enemy.getUp() == true) {
+		 if (enemy.getDown() == true && enemy.getUp() == false)
+			 enemy.setDirezione(1);
+		 if (enemy.getDown() == false && enemy.getUp() == true)
+			 enemy.setDirezione(-1);
+		 int spd = enemy.getDirezione() * enemy.getSpd();
+		 enemy.setRy(enemy.getRy() + spd);
 
- int WerewolfBehavior::moveX(int coordX, int speed) {
-	 return 0;
- }
-
- int WerewolfBehavior::moveY(int coordY, int speed) {
-	 if (coordY <= 500) {
-		 int x = coordY + speed;
-		 return x;
+		 
 	 }
-	 else if (coordY >0) {
-		 int x = coordY - speed;
-		 return x;
-	 }
+	
  }

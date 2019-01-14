@@ -1,5 +1,6 @@
 #pragma once
 #include"SDL.h"
+#undef main
 #include"SDL_image.h"
 
 
@@ -27,6 +28,7 @@ private:
 	bool dir;
 	bool inc;
 	bool erasable;
+	int speed;
 	SDL_Rect rect;
 	SDL_Texture* bulletTex;
 };

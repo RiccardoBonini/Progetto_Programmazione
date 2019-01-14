@@ -1,14 +1,14 @@
 #include "Game.h"
 #include "Observer.h"
 
+
+
 SDL_Renderer* Game::renderer = nullptr;
 
-Game::Game(int num1, int num2, int num3)
-{
-	goblinNum = num1;
-	zombieNum = num2;
-	werewolfNum = num3;
 
+Game::Game(int num)
+{
+	enemiesNum = num;
 }
 
 Game::~Game()
@@ -25,49 +25,30 @@ void Game::init(const char *title, int x, int y, int width, int height, bool ful
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);}
 	isRunning = true;
+	if (TTF_Init() == -1)
+		isRunning = false;
 	item ;
-	//room.loadMap();
-	/*for (int i = 0; i < 20; i++) {
-		for (int j = 0; j < 50; j++)
-			map[i][j] = room.loadMap(i, j);
-	}
-	//inserimento tiles nel vettore. In questo modo il rendering richiede solo di disegnare i singoli tiles
-	//int muro = 0;
-	for (int i = 0; i < 20; i++) {
-		for (int j = 0; j < 50; j++) {
-			int muro = map[i][j];
-			int x = j * 32;
-			int y = i * 32;
-			if (muro == 1)
-				tiles.push_back(TileFactory::makeTile('w', x, y));
-			//SDL_RenderCopy(Game::renderer, wall, NULL, &dest);
-			//TextureManager::draw(wall, src, dest);
-			else if (muro == 0)
-				tiles.push_back(TileFactory::makeTile('g', x, y));
-			//SDL_RenderCopy(Game::renderer, terrain, NULL, &dest);
-			//TextureManager::draw(terrain, src, dest);
-			else
-				break;
-		}
-	}*/
-	roomWidth = room.getWidth();
-	roomHeight = room.getHeight();
-	for (int i = 0; i < 2 /*goblinNum*/; i++)
-		enemies.push_back(EnemyFactory::makeEnemy('g',roomWidth, roomHeight));
-	for (int i = 0; i < 2/*zombieNum*/; i++)
-		enemies.push_back(EnemyFactory::makeEnemy('z', roomWidth, roomHeight));
-	for (int i = 0; i < 2 /*werewolfNum*/; i++)
-		enemies.push_back(EnemyFactory::makeEnemy('w', roomWidth, roomHeight));
 	room = Map();
 	room.loadMap();
-	hero= Hero(room.getWidth(), room.getHeight());
-	solidSize = room.mapSize();
+	hero= Hero(120, 60);
+	room.spawnEnemies(enemies, enemiesNum);
 	deadEnemies = 0;
+	brokenThings = 0;
 	timer = 0;
 	strike = false;
 	firstStrike = false;
+	firstMassacre = false;
+	firstVandal = false;
 	sob = new ScoreObserver(this);
+	aob = new SurroundingObserver(this);
 	lastdir = 0;
+	punteggio = Text(Game::renderer, "sprite/arial.ttf", 30, "Punteggio : ", { 0, 0, 0, 0 }, 100, 200, 50, 650, 0);
+	victory = Text(Game::renderer, "sprite/arial.ttf", 30, "VICTORY", { 255, 0, 0, 0 }, 300, 600, 350, 200, 0);
+	lost = Text(Game::renderer, "sprite/arial.ttf", 30, "YOU LOST", { 0, 0, 255, 0 }, 300, 600, 350, 200, 0);
+	pressanykey = Text(Game::renderer, "sprite/arial.ttf", 30, "press H to exit the game", { 0, 0, 0, 0 }, 100, 400, 450, 500, 0);
+	for (int i = 0; i < enemiesNum + 1; i++)
+		score.push_back(Text(Game::renderer, "sprite/arial.ttf", 30, std::to_string(i), { 0, 0, 0, 0 }, 100, 20, 255, 650, 0));
+	end = false;
 	
 }
 
@@ -78,6 +59,7 @@ void Game::handleExit(){
 	case SDL_QUIT:
 		isRunning = false;
 		break;
+	
 	}
 	
 }
@@ -95,6 +77,8 @@ void Game::handleInput() {
 	      
 			if (room.CollisionCWup(hero.getRx(), hero.getRy(), hero.getRw(), hero.getRh(), hero.getSpd()) == false) {
 				hero.move(false, true);
+				room.adjustY(hero.getSpd());
+				adjustY(hero.getSpd());
 				lastdir = 1;
 				break;
 			}
@@ -107,6 +91,8 @@ void Game::handleInput() {
 			
 			if (room.CollisionCWdown(hero.getRx(), hero.getRy(), hero.getRw(), hero.getRh(), hero.getSpd()) == false) {
 				hero.move(false, false);
+				room.adjustY(-hero.getSpd());
+				adjustY(-hero.getSpd());
 				lastdir = 2;
 				break;
 			}
@@ -119,6 +105,8 @@ void Game::handleInput() {
 			
 			if (room.CollisionCWright(hero.getRx(), hero.getRy(), hero.getRw(), hero.getRh(), hero.getSpd()) == false) {
 				hero.move(true, true);
+				room.adjustX(-hero.getSpd());
+				adjustX(-hero.getSpd());
 				lastdir = 3;
 				break;
 			}
@@ -131,6 +119,8 @@ void Game::handleInput() {
 			
 			if (room.CollisionCWleft(hero.getRx(), hero.getRy(), hero.getRw(), hero.getRh(), hero.getSpd()) == false) {
 				hero.move(true, false);
+				room.adjustX(hero.getSpd());
+				adjustX(hero.getSpd());
 				lastdir = 4;
 				break;
 			}
@@ -151,57 +141,17 @@ void Game::handleInput() {
 		case SDLK_j:
 			bullets.push_back(Bullet(hero.getRx(), hero.getRy(), true, false));
 			break;
-
+		case SDLK_h:
+			if (end == true)
+				isRunning = false;
+			break;
 		}
 	}
 }
 
 void Game::update() {
-	//room.update();
-	/*for (int i = 0; i < solidSize; i++) {
-		if (room.getTile(i)->solid() == true) {
-			if (CollisionWup(hero, room.getTile(i))==true)
-				hero.setUp(false);
-			else
-				hero.setUp(true);
-			if (CollisionWdown(hero, room.getTile(i))==true)
-				hero.setDown(false);
-			else
-				hero.setDown(true);
-			if (CollisionWleft(hero, room.getTile(i))==true)
-				hero.setLeft(false);
-			else
-				hero.setLeft(true);
-			if (CollisionWright(hero, room.getTile(i))==true)
-				hero.setRight(false);
-			else
-				hero.setRight(true);
-		}
-	}*/
-	/*for (int i = 0; i < solidSize; i++) {
-		if (room.solidTile(i) == true) {
-			/*if (CollisionW(hero, room.getTile(i)) && under(hero, room.getTile(i)))
-				//hero.getHit(enemies[1]);
-				hero.stopUp();
-			/*if (CollisionW(hero, room.getTile(i)) && over(hero, room.getTile(i)))
-				hero.stopDown();
-			if (CollisionW(hero, room.getTile(i)) && left(hero, room.getTile(i)))
-				hero.stopRight();
-			if (CollisionW(hero, room.getTile(i)) && right(hero, room.getTile(i)))
-				hero.stopLeft();*/
-			/*for (int j = 0; j < bullets.size(); j++) {
-				if (room.CollisionBW(bullets[j]))
-					bullets[j].erase();
-			}*/
-		
-		/*else if(room.solidTile(i)==false){
-			//if(CollisionW(hero, room.getTile(i))==true)
-				if(hero.getUp()==false || hero.getDown()==false || hero.getLeft()==false || hero.getRight()==false)
-					hero.free();
-			  //hero.getHit(enemies[1]);
-		}*/
-		
-	//}
+
+	room.update();
 	for (int i = 0; i < bullets.size(); i++) {
 		bullets[i].update();
 		for (int j = 0; j < enemies.size(); j++) {
@@ -210,11 +160,9 @@ void Game::update() {
 				if (enemies[j]->isAlive() == false) {
 					items.push_back(enemies[j]->drop());
 					enemies[j]->erase();
-					//enemies.erase(enemies.begin() + j );
 					deadEnemies++;
 				}
 				bullets[i].eraseBullet();
-				//bullets.erase(bullets.begin() +i );
 			}
 			
 	
@@ -222,33 +170,27 @@ void Game::update() {
 		
 
 	}
-	room.CollisionBW(bullets);
-	/*for (int i = 0; i < enemies.size(); i++) {
-         if (CollisionC(hero, enemies[i]))
-				hero.getHit(enemies[i]);
-	}*/
+	room.CollisionBW(bullets, brokenThings);
+	
 	for (int j = 0; j < enemies.size(); j++) {
 		if (CollisionC(hero, enemies[j]))
 			hero.getHit(enemies[j]);
-		enemies[j]->update();
+		enemies[j]->setUp(room.CollisionCWup(enemies[j]->getRx(), enemies[j]->getRy(), enemies[j]->getRw(), enemies[j]->getRh(), enemies[j]->getSpd()));
+		enemies[j]->setDown(room.CollisionCWdown(enemies[j]->getRx(), enemies[j]->getRy(), enemies[j]->getRw(), enemies[j]->getRh(), enemies[j]->getSpd()));
+		enemies[j]->setRight(room.CollisionCWright(enemies[j]->getRx(), enemies[j]->getRy(), enemies[j]->getRw(), enemies[j]->getRh(), enemies[j]->getSpd()));
+		enemies[j]->setLeft(room.CollisionCWleft(enemies[j]->getRx(), enemies[j]->getRy(), enemies[j]->getRw(), enemies[j]->getRh(), enemies[j]->getSpd()));
+		enemies[j]->update(hero);
 	}
-	/*for (int j = 0; j < items.size(); j++) {
-		if (CollisionHI(hero, items[j])) {
-			hero.getItem(items[j]);
-			items[j]->erase();
-		}
-	}*/
+	
 	for (int i = 0; i < items.size();i++) {
 		if (CollisionHI(hero, items[i])) {
 			hero.getItem(items[i]);
 			items[i]->erase();
-			//(*it)->erasable();
-			//it = items.erase(it);
+			
 		}
 
 		
 	}
-	
 	
 	hero.update();
 	notify();
@@ -262,20 +204,7 @@ void Game::update() {
 		}
 	}
 
-	
-	/*
-		for (int h = 0; h < enemies.size(); h++)
-			if (bullets[j].getX() == enemies[h]->getX() && bullets[j].getY() == enemies[h]->getY())
-				enemies.erase(enemies.begin() + h);
-	}
-	for (int i = 0; i < enemies.size(); i++) {
-		enemies[i]->move();
-		std::cout << "CordX di " << " " << i << ":" << " " << enemies[i]->getX();
-		std::cout << " CordY di " << " " << i << ":" << " " << enemies[i]->getY();
-		
-	}
-	std::cout << room.getHeight();
-	std::cout << room.getWidth();*/
+
 	for (int i = 0; i < bullets.size(); i++) {       //ciclo di cancellazione degli elementi "erasable"
 		if (bullets[i].isErasable())
 			bullets.erase(bullets.begin() + i);
@@ -290,22 +219,50 @@ void Game::update() {
 		if (items[i]->isErasable())
 			items.erase(items.begin() + i);
 	}
-	
+
+	for (int i = 0; i < text.size(); i++) {
+		if (text[i].isErasable())
+			text.erase(text.begin() + i);
+	}
+
+	room.erase();
+	if (deadEnemies >= 6 || hero.isAlive() == false)
+		end = true; 
 }
 
 void Game::render() {
 	SDL_RenderClear(renderer);
-	room.drawMap();
-	hero.render();
-	for (int j = 0; j < enemies.size(); j++)
-		enemies[j]->render();
-	for (int j = 0; j < bullets.size(); j++)
-		bullets[j].render();
-	/*for (int j = 0; j < items.size(); j++)
-		items[j]->render();*/
-	//drawScore(renderer);
-	for (int i = 0; i < items.size(); i++)
-		items[i]->render();
+	if (end == false) {
+		room.drawMap();
+		hero.render();
+		for (int j = 0; j < enemies.size(); j++)
+			enemies[j]->render();
+
+		for (int j = 0; j < bullets.size(); j++)
+			bullets[j].render();
+
+		for (int i = 0; i < items.size(); i++)
+			items[i]->render();
+		
+		for (int i = 0; i < text.size(); i++) {
+			text[i].display(renderer);
+
+		}
+		punteggio.display(renderer);
+		score[deadEnemies].display(renderer);
+	}
+	else {
+		SDL_RenderClear(renderer);
+		if (deadEnemies >= 5) {
+			victory.display(renderer);
+			pressanykey.display(renderer);
+		}
+		else {
+			lost.display(renderer);
+			pressanykey.display(renderer);
+		}
+		
+	}
 	SDL_RenderPresent(renderer);
 	
 }
@@ -313,6 +270,7 @@ void Game::render() {
 void Game::clean() {
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
+	TTF_Quit();
 	SDL_Quit();
 }
 
@@ -345,78 +303,6 @@ bool Game::CollisionB(Character*a, Bullet b) {
 		return true;
 }
 
-/*bool Game::CollisionWup(Character a, Tile* t) {
-	if (a.getRx() >= t->getRx() + t->getRw() && a.getRx() + a.getRw() <= t->getRx() &&
-		a.getRy() + a.getRh() <= t->getRy())
-		return false;
-	else
-		return true;
-}
-
-bool Game::CollisionWdown(Character a, Tile* t) {
-	if (a.getRy() + a.getRh()  >= t->getRy())
-		return true;
-	else
-		return false;
-}
-
-bool Game::CollisionWleft(Character a, Tile* t) {
-	if (a.getRx() <= t->getRx() + t->getRw())
-		return true;
-	else
-		return false;
-}
-
-bool Game::CollisionWright(Character a, Tile* t) {
-	if (a.getRx() + a.getRw() <= t->getRx() )
-		return true;
-	else
-		return false;
-}*/
-
-/*bool Game::CollisionW(Character a, Tile* t) {
-	if(a.getRx() + a.getRw() <t->getRx() || a.getRx() > t->getRx() + t->getRw()  ||
-		a.getRy() + a.getRh()  < t->getRy() || a.getRy() > t->getRy() + t->getRh() )
-		return false;
-	else
-		return true;
-}
-
-bool Game::under(Character a, Tile* t) {
-	if (a.getRy() >= t->getRy() + t->getRh() && (a.getRx() >= t->getRx() || a.getRx()<= t->getRx() + t->getRw()))
-		return true;
-	else
-		return false;
-}
-
-bool Game::over(Character a, Tile* t) {
-	if (a.getRy() + a.getRh() <= t->getRy())
-		return true;
-	else
-		return false;
-}
-
-bool Game::left(Character a, Tile* t) {
-	if (a.getRx() + a.getRw() <= t->getRx())
-		return true;
-	else
-		return false;
-}
-
-bool Game::right(Character a, Tile* t) {
-	if (a.getRx() >= t->getRx() + t->getRw())
-		return true;
-	else
-		return false;
-}
-
-/*bool Game::CollisionBW(Bullet a, Tile* t) {
-	if (a.getRx() + a.getRw() <t->getRx() || a.getRx() > t->getRx() + t->getRw() ||
-		a.getRy() + a.getRh()  < t->getRy() || a.getRy() > t->getRy() + t->getRh())
-		return false;
-	else
-		return true;
-}*/
 
 bool Game::CollisionHI(Character a, Item * b)
 {
@@ -427,23 +313,6 @@ bool Game::CollisionHI(Character a, Item * b)
 		return true;
 }
 
-void Game::drawScore(SDL_Renderer * rend) {
-	TTF_Font* Sans = TTF_OpenFont("Sans.ttf", 24); 
-
-	SDL_Color Red = { 255, 255, 255 };
-
-	SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, "punteggio: 3", Red); 
-
-	SDL_Texture* Message = SDL_CreateTextureFromSurface(rend, surfaceMessage); 
-
-	SDL_Rect Message_rect; 
-	Message_rect.x = 0;  
-	Message_rect.y = 0; 
-	Message_rect.w = 100; 
-	Message_rect.h = 100; 
-
-	SDL_RenderCopy(rend, Message, NULL, &Message_rect);
-}
 
 void Game::notify() {
 	for (int i = 0; i < observer.size(); i++)
@@ -457,7 +326,44 @@ void Game::attach(Observer* ob) {
 void Game::deadStrike() {
 	if (firstStrike == false) {
 		hero.color(36, 23, 157); 
+		text.push_back(Text(Game::renderer, "sprite/arial.ttf", 30, "KILL STREAK!" , { 0, 0, 255, 0 }, 100, 200, hero.getRx() -150, hero.getRy() - 100, 150));
 		strike = true;
 	}
 	firstStrike = true;
 }
+
+void Game::massacre()
+{
+	if (firstMassacre == false) {
+		hero.color(36, 23, 157);
+		text.push_back(Text(Game::renderer, "sprite/arial.ttf", 30, "MASSACRE!", { 0, 255, 255, 0 }, 100, 200, hero.getRx() - 150, hero.getRy() - 100, 150));
+		strike = true;
+	}
+	firstMassacre = true;
+}
+
+void Game::vandal()
+{
+	if (firstVandal == false) {
+		hero.color(36, 23, 157);
+		text.push_back(Text(Game::renderer, "sprite/arial.ttf", 30, "VANDAL!", { 255, 0, 0, 0 }, 100, 200, hero.getRx() - 150, hero.getRy() - 100, 150));
+		strike = true;
+	}
+	firstVandal = true;
+
+}
+
+void Game::adjustX(int speed) {
+	for (int i = 0; i < enemies.size(); i++)
+		enemies[i]->setRx(enemies[i]->getRx() + speed);
+	for (int j = 0; j < items.size(); j++)
+		items[j]->setRx(items[j]->getRx() + speed);
+}
+
+void Game::adjustY(int speed) {
+	for (int i = 0; i < enemies.size(); i++)
+		enemies[i]->setRy(enemies[i]->getRy() + speed);
+	for (int j = 0; j < items.size(); j++)
+		items[j]->setRy(items[j]->getRy() + speed);
+}
+

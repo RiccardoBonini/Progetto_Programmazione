@@ -1,13 +1,16 @@
 
 #include "SDL.h"
+#undef main
 #include "Game.h"
 
 
-Hero::Hero() {
 
+
+Hero::Hero()
+{
 }
 
-Hero::Hero(float bound1, float bound2)
+Hero::Hero(int x, int y)
 {
 	hp = 250;
 	coordX = 0;
@@ -16,13 +19,11 @@ Hero::Hero(float bound1, float bound2)
 	spdw =spds=spdd=spda = tmpspdw = tmpspds = tmpspdd = tmpspda = 10;
 	damage = 30;
 	alive = true;
-	Xbound = bound1 ;
-	Ybound = bound2 ;
 	tex = Game::LoadTexture("sprite/knight.png");
 	rect.h = 64;
 	rect.w = 64;
-	rect.x =120;
-	rect.y =60;
+	rect.x =x;
+	rect.y =y;
 	timer = 0;
 	damaged = false;
 	up = down = left = right = true;
@@ -46,8 +47,7 @@ void Hero::update(){
 	
 	if (hp <= 0)
 		alive = false;
-	/*rect.h = 64;
-	rect.w = 64;*/
+	
 	
 }
 
@@ -62,20 +62,20 @@ void Hero::getItem(Item* item) {
 void Hero::getHit(Enemy* enemy) {
 	damaged = true;
 	color(255, 0, 0);
-	//hp -= enemy->getDmg();
+	hp -= enemy->getDmg();
 }
 
 void Hero::move(bool dir, bool inc) {
 	if (dir == true) {
 		if (inc == true) {
 			{
-			//coordX += speed / 10;
+			
 			rect.x += speed;
 		}
 		}
 		else {
 			{
-				//coordX -= speed / 10;
+				
 				rect.x -= speed;
 			}
 		}
@@ -83,13 +83,13 @@ void Hero::move(bool dir, bool inc) {
 	else {
 		if (inc == true) {
 			 {
-				//coordY -= speed / 10;
+				
 				rect.y -= speed;
 			}
 		}
 		else {
 			{
-				//coordY += speed / 10;
+				
 				rect.y += speed;
 			}
 		}
@@ -98,6 +98,7 @@ void Hero::move(bool dir, bool inc) {
 
 void Hero::render() {
 
+	
 	SDL_RenderCopy(Game::renderer, tex, NULL, &rect);
 
 }

@@ -18,3 +18,11 @@ public:
 	void update();
 };
 
+class SurroundingObserver : public Observer
+{
+public:
+	SurroundingObserver(Game* targ) : Observer(targ) {}
+	void update();
+};
+
+

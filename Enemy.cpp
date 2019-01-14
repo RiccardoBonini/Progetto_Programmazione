@@ -2,15 +2,9 @@
 #include "Game.h"
 #include "ItemFactory.h"
 
-Enemy::Enemy(){}
+const float PI = 3.1415;
 
-/*Enemy::Enemy(float bound1, float bound2)
-{
-	coordX = rand()% 50;
-	coordY = rand()% 10;
-	Xbound = bound1 - 4;
-	Ybound = bound2 - 4;
-}*/
+Enemy::Enemy(){}
 
 
 Enemy::~Enemy()
@@ -59,18 +53,28 @@ void Enemy::roam() {
 }
 
 void Enemy::render(){
-	SDL_RenderCopy(Game::renderer, tex, NULL, &rect);
+	SDL_RenderCopy(Game::renderer, tex, &srect, &rect);
+}
+
+bool Enemy::HeroInSight(int x, int y)
+{
+	int distx = rect.x - x;
+	int disty = rect.y - y;
+	if (distx * distx + disty * disty  < sight * sight)
+		return true;
+	else
+		return false;
 }
 
 void Enemy::getShot(Bullet p) {
 	damaged = true;
 	SDL_SetTextureColorMod(tex, 255, 0, 0);
-	//hp -= p.getDmg();
-	alive = false;
+	hp -= p.getDmg();
+	if (hp<=0)
+		alive = false;
 }
-void Enemy::update(){
-	/*rect.h = 64;
-	rect.w = 64;*/
+void Enemy::update(Hero hero){
+	
 	if (damaged == true) {
 		if (timer < 50)
 			timer++;
@@ -80,122 +84,115 @@ void Enemy::update(){
 			SDL_SetTextureColorMod(tex, 255, 255, 255);
 		}
 	}
-	move();
+	if (spotted == false && HeroInSight(hero.getRx(), hero.getRy()) == true)
+		spotted = true;
+	move(hero);
 }
 
 
-Goblin::Goblin(int bound1, int bound2) {
+Goblin::Goblin(int x, int y) {
 	erasable = false;
-	hp = 70;
-	speed = 3.5;
-	damage = 25;
+	hp = 50;
+	speed = 2.5;
+	damage = 500;
 	alive = true;
 	coordX = rand() % 50;
 	coordY = rand() % 10;
-	Xbound = bound1 -2;
-	Ybound = bound2 -2;
-	tex = Game::LoadTexture("sprite/goblin.png");
+	tex = Game::LoadTexture("sprite/goblinsheet.png");
 	this->behavior = new GoblinBehavior();
-	rect.x =2+ rand() %500;
-	rect.y =2+ rand()% 500;
+	srect.x = srect.y = 0;
+	srect.h = 60;
+	srect.w = 75;
+	rect.x =x;
+	rect.y =y;
 	rect.h = 64;
-	rect.w = 64;
+	rect.w = 74;
 	timer = 0;
 	damaged = false;
+	up = down = left = right = true;
+	sight = 150;
+	spotted = false;
 }
 
-void Goblin::move()
+void Goblin::move(Hero hero)
 {
-	rect.x=this->behavior->moveX(rect.x, speed);
-	rect.y = this->behavior->moveY(rect.y, speed);
+	this->behavior->move(*this, hero);
 }
 
 Item* Goblin::drop() {
 	return ItemFactory::createItem('f', rect.x, rect.y);
 }
 
-/*void Goblin::draw() {
-	std::cout << "G";
-}*/
 
-Zombie::Zombie(int bound1, int bound2) {
+Zombie::Zombie(int x, int y) {
 	erasable = false;
-	hp = 150;
-	speed = 10;
-	damage = 50;
+	hp = 100;
+	speed = 1;
+	damage = 2.5;
 	alive = true;
 	coordX = rand() % 50;
 	coordY = rand() % 10;
-	Xbound = bound1 -2;
-	Ybound = bound2 -2;
-	tex= Game::LoadTexture("sprite/zombie.png");
+	tex= Game::LoadTexture("sprite/zombiesheet.png");
 	this->behavior = new ZombieBehavior;
-	rect.x = 2 + rand() % 500;
-	rect.y = 2 + rand() % 500;
-	rect.h = 64;
-	rect.w = 64;
+	srect.x = srect.y = 0;
+	srect.h = 84;
+	srect.w = 60;
+	rect.x = x;
+	rect.y = y;
+	rect.h = 80;
+	rect.w = 60;
 	timer = 0;
 	damaged = false;
+	up = down = left = right = true;
+	direzione = 1;
+	spotted = false;
+	sight = 120;
 }
 
-void Zombie::move()
+void Zombie::move(Hero hero)
 {
-	rect.x=this->behavior->moveX(rect.x, speed);
-	/*if (coordX != Xbound)
-		coordX += speed;
-	else if(coordX == Xbound)
-		coordX -= speed;
-	else if (coordX == 0)
-		coordX+= speed;
-	else if(coordX != 0)
-		coordY -= speed;*/
+	
+	this->behavior->move(*this, hero);
+	
 }
 
 Item* Zombie::drop() {
 	return ItemFactory::createItem('p', rect.x, rect.y);
 }
 
-/*void Zombie::draw() {
-	std::cout << "Z";
-}*/
 
-Werewolf::Werewolf(int bound1, int bound2) {
+Werewolf::Werewolf(int x, int y) {
 	erasable = false;
-	hp = 200;
-	speed = 2.5;
-	damage = 50;
+	hp = 150;
+	speed = 2;
+	damage = 5;
 	alive = true;
 	coordX = rand() % 50;
 	coordY = rand() % 10;
-	Xbound = bound1 - 4;
-	Ybound = bound2 -4;
-	tex= Game::LoadTexture("sprite/werewolf.png");
+	tex= Game::LoadTexture("sprite/werewolfsheet.png");
 	this->behavior = new WerewolfBehavior;
-	rect.x = 2 + rand() % 500;
-	rect.y = 2 + rand() % 500;
-	rect.h = 64;
-	rect.w = 64;
+	srect.x = srect.y = 0;
+	srect.h = 60;
+	srect.w = 85;
+	rect.x = x;
+	rect.y = y;
+	rect.h = 80;
+	rect.w = 90;
 	timer = 0;
 	damaged = false;
+	up = down = left = right = true;
+	direzione = 1;
+	spotted = false;
+	sight = 200;
 }
 
-void Werewolf::move()
+void Werewolf::move(Hero hero)
 {
-	rect.y=this->behavior->moveY(rect.y, speed);
-	/*if (coordY != Ybound)
-		coordY += speed;
-	else if (coordY == Ybound)
-		coordY -= speed;
-	else if (coordY == 0)
-		coordY += speed;
-	else if (coordY != 0)
-		coordY -= 0;*/
+	
+	this->behavior->move(*this, hero);
 }
 
 Item* Werewolf::drop() {
 	return ItemFactory::createItem('b', rect.x, rect.y);
 }
 
-/*void Werewolf::draw() {
-	std::cout << "W";
-}*/
