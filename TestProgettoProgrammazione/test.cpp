@@ -1,33 +1,33 @@
 #include "pch.h"
 
 
-#include"../ProgettoProgrammazione/Hero.h"
+
 #include"../ProgettoProgrammazione/Hero.cpp"
-#include"../ProgettoProgrammazione/Character.h"
+
 #include"../ProgettoProgrammazione/Character.cpp"*/
-#include"../ProgettoProgrammazione/Game.h"
+
 #include"../ProgettoProgrammazione/Game.cpp"
-#include"../ProgettoProgrammazione/Enemy.h"
+
 #include"../ProgettoProgrammazione/Enemy.cpp"
-#include"../ProgettoProgrammazione/Bullet.h"
+
 #include"../ProgettoProgrammazione/Bullet.cpp"
-#include"../ProgettoProgrammazione/Item.h"
+
 #include"../ProgettoProgrammazione/Item.cpp"
-#include"../ProgettoProgrammazione/ItemFactory.h"
+
 #include"../ProgettoProgrammazione/ItemFactory.cpp"
-#include"../ProgettoProgrammazione/Map.h"
+
 #include"../ProgettoProgrammazione/Map.cpp"
-#include"../ProgettoProgrammazione/MovementBehavior.h"
+
 #include"../ProgettoProgrammazione/MovementBehavior.cpp"
-#include"../ProgettoProgrammazione/Observer.h"
+
 #include"../ProgettoProgrammazione/Observer.cpp"
-#include"../ProgettoProgrammazione/Text.h"
+
 #include"../ProgettoProgrammazione/Text.cpp"
-#include"../ProgettoProgrammazione/Tile.h"
+
 #include"../ProgettoProgrammazione/Tile.cpp"
-#include"../ProgettoProgrammazione/TileFactory.h"
+
 #include"../ProgettoProgrammazione/TileFactory.cpp"
-#include"../ProgettoProgrammazione/EnemyFactory.h"
+
 #include"../ProgettoProgrammazione/EnemyFactory.cpp"
 
 TEST(HeroTest, HeroValues) {
@@ -40,15 +40,21 @@ TEST(HeroTest, HeroValues) {
 
 TEST(HeroTest, HeroMovement) {
 	
-	Hero h = Hero(0, 0);
-	Tile *t = TileFactory::makeTile('w', 214, 0);                                           //mandiamo l'eroe contro un singolo tile
-	for (int i = 0; i < 1000; i++) {                                                        //di tipo muro, deve essere verificata la collisione 
-		if(Map::CollisionCW(h.getRx(), h.getRy(), h.getRh(), h.getRw(), t)==false)
+	Hero h = Hero(0, 50);	                                                                //mandiamo l'eroe contro un muro di tile solidi a destra
+	std::vector<Tile *> wall;                                                               //deve essere verificata la collisione 
+	bool rightCollision = false;
+	for(int i= 0; i< 20; i++)
+		wall.push_back(TileFactory::makeTile('w', 250, i*32));
+	for (int i = 0; i < 1000; i++) {                                                         
+		for (int j = 0; j < wall.size(); j++) {
+			if (Map::CollisionCW(h.getRx() + h.getSpd() , h.getRy(), h.getRh(), h.getRw(), wall[j]) == true)    //viene verificato ad ogni ciclo se l'eroe 
+				rightCollision = true;                                                                             //collide con qualcosa a destra
+		}
+		if(rightCollision==false)
 			h.move(true, true);
 	}
 
-	EXPECT_EQ(h.getRx(), 214 - h.getRw());                                                  //l'eroe non deve essere andato oltre il tile
-	EXPECT_TRUE(Map::CollisionCW(h.getRx(), h.getRy(), h.getRh(), h.getRw(), t));
+	EXPECT_TRUE(h.getRx() + h.getRw() < 250);                                               //l'eroe non deve essere andato oltre il muro
 }
 
 TEST(HeroTest, Shooting) {
