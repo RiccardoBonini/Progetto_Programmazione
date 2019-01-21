@@ -30,12 +30,30 @@
 
 #include"../ProgettoProgrammazione/EnemyFactory.cpp"
 
-TEST(HeroTest, HeroValues) {
+TEST(CharacterTest, Values) {
 
 	Hero h =  Hero(0, 0);
+	Goblin g = Goblin(0, 0);
+	Zombie z = Zombie(0, 0);
+	Werewolf w = Werewolf(0, 0);
+
   EXPECT_EQ(h.getHp(), 250);
   EXPECT_EQ(h.getDmg(), 30);
   EXPECT_EQ(h.getSpd(), 15);
+
+  EXPECT_EQ(g.getHp(), 50);
+  EXPECT_EQ(g.getDmg(), 500);
+  EXPECT_EQ(g.getSpd(), 2);
+
+  EXPECT_EQ(z.getHp(), 100);
+  EXPECT_EQ(z.getDmg(), 2);
+  EXPECT_EQ(z.getSpd(), 1);
+
+  EXPECT_EQ(w.getHp(), 150);
+  EXPECT_EQ(w.getDmg(), 5);
+  EXPECT_EQ(w.getSpd(), 2);
+
+
 }
 
 TEST(HeroTest, HeroMovement) {
@@ -135,6 +153,28 @@ TEST(EnemyTest, Death) {
 
 	EXPECT_EQ(enemies.size(), 0);
 } 
+
+TEST(EnemyTest, AttackHero) {
+
+	Hero h = Hero(10, 10);
+	std::vector<Enemy*> enemies;
+	int time = 1000;
+	for (int i = 0; i < 50; i++) {
+		enemies.push_back(EnemyFactory::makeEnemy('g', rand() % 20, rand() % 20));     //creiamo 50 lupi mannari vicino all'eroe
+	}
+	while (time > 1) {
+		for (int i = 0; i < enemies.size(); i++) {
+			enemies[i]->update(h);                                                    //grazie al loro behavior, i nemici attaccheranno
+			enemies[i]->move(h);                                                      //l'eroe se in sua prossimità
+			if (Game::CollisionC(h, enemies[i]))                                      //quando scade il tempo l'eroe deve essere morto
+				h.getHit(enemies[i]);
+		}
+		h.update();
+		time--;
+	}
+
+	EXPECT_TRUE(h.getHp() <= 0);
+}
 
 int main(int argc, char **argv) {
 	testing::InitGoogleTest(&argc, argv);
