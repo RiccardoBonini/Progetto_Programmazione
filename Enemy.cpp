@@ -93,7 +93,7 @@ void Enemy::update(Hero hero){
 Goblin::Goblin(int x, int y) {
 	erasable = false;
 	hp = 50;
-	speed = 2.5;
+	speed = 2;
 	damage = 500;
 	alive = true;
 	coordX = rand() % 50;
@@ -128,7 +128,7 @@ Zombie::Zombie(int x, int y) {
 	erasable = false;
 	hp = 100;
 	speed = 1;
-	damage = 2.5;
+	damage = 2;
 	alive = true;
 	coordX = rand() % 50;
 	coordY = rand() % 10;
